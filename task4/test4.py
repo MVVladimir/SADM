@@ -1,4 +1,5 @@
-from task4 import pipeline
+from task4 import task
 
-files = ["./graph_task4.csv", "./graph_task4_1.csv", "./graph_task4_2.csv"]
-pipeline(files)
+reference = 6.5
+csvString = '1,2\n1,3\n3,4\n3,5'
+print(task(csvString) == reference)

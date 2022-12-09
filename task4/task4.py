@@ -41,7 +41,7 @@ def find_r5(d: dict, A: np.array) -> dict:
 
     return d
 
-def task(graph: np.array) -> float:
+def graph2entropy(graph: np.array, test: bool = True) -> float:
     def set_def():
         return [0, 0, 0, 0, 0]
 
@@ -53,7 +53,8 @@ def task(graph: np.array) -> float:
     l = pd.DataFrame(l) # здесь будут колонка -- объект, строка -- сотояние
     l = l.to_numpy().T # А здесь они снова перевернутся, строка -- объект
 
-    print(f"Матрица связности графа A = \n{l}")
+    if test:
+        print(f"Матрица связности графа A = \n{l}")
 
     n = len(l) # количество объектов
 
@@ -62,7 +63,7 @@ def task(graph: np.array) -> float:
         for cond in elem:
             if cond > 0:
                 p = cond / (n - 1)
-                logp = math.log10(p)
+                logp = math.log2(p)
                 s += p * logp
 
     return -s # с минусом
@@ -71,5 +72,19 @@ def pipeline(files: list):
     for i, file in enumerate(files):
         A = pd.read_csv(file).to_numpy()
         print(f"=== Задача №{i} ==========")
-        entropy = task(A)
+        entropy = graph2entropy(A)
         print(f"Ответ: энтропия равна {entropy:.4f} \n")
+
+def parsestr(s: str):
+    s: list = s.split('\n')
+    graph = []
+    for sub in s:
+        sub = sub.split(',')
+        for i in range(len(sub)):
+            sub[i] = int(sub[i]) 
+        graph.append(sub)
+    return np.array(graph, dtype=np.int32)
+
+def task(s: str):
+    s = parsestr(s)
+    return graph2entropy(s, test=False)
