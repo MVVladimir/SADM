@@ -1,7 +1,7 @@
 import numpy as np
 import json
 
-def task(s: str) -> np.array:
+def task(s: str) -> list:
     df = np.array(json.loads(s))
 
     r = []
