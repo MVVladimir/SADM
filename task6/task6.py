@@ -3,6 +3,7 @@ import json
 
 def task(s: str) -> list:
     df = np.array(json.loads(s))
+    df = df.T
 
     r = []
     for i in range(df.shape[1]):
@@ -25,12 +26,15 @@ def task(s: str) -> list:
 
     k = np.array([1/3, 1/3, 1/3])
     k_old = k.copy()
+    y = np.dot(x, k)
+    lmd = np.dot(np.array([1.0, 1.0, 1.0]), y)
+    k = np.dot((1 / lmd), y)
 
     E = 0.001
-    while np.linalg.norm(k - k_old) < E:
+    while  max(abs(k - k_old)) >= E:
         k_old = k.copy()
-        y = x @ k
-        lmd = np.array([1.0, 1.0, 1.0]) @ (x @ k)
-        k = (1 / lmd) * y
+        y = np.dot(x, k)
+        lmd = np.dot(np.array([1.0, 1.0, 1.0]), y)
+        k = np.dot((1 / lmd), y)
 
-    return k.tolist()
+    return [round(anw,3) for anw in k]
